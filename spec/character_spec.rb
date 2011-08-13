@@ -1,0 +1,3 @@
+class Character
+  describe
+end

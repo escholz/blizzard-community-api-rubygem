@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "battle.net"
   gem.homepage = "http://github.com/escholz/battle.net"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{World of Warcraft API Client Library}
+  gem.description = %Q{Ruby Implementation of Blizzard's World of Warcraft API}
   gem.email = "eric.scholz@gmail.com"
   gem.authors = ["Eric Scholz"]
   # dependencies defined in Gemfile
