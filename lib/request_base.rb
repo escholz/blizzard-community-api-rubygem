@@ -1,9 +1,12 @@
 require "net/http"
 require "uri"
 require "json"
+require "base64"
+require "hmac-sha1"
 require "object_base"
 
 module BattleNet
+  # TODO: Split Request/AuthenticatedRequest into Adapter classes that can be garbage collected after use.
   class RequestBase < ObjectBase
 
     API_ROOT_PATH = "/api/wow"
@@ -28,10 +31,18 @@ module BattleNet
       @@locale = locale
     end
 
+    def self.set_private_key(key)
+      @@private_key = key
+    end
+
+    def self.set_public_key(key)
+      @@public_key = key
+    end
+
     attr_reader :locale, :last_modified
 
     def uri()
-     return URI.parse("#{@protocol}://#{API_HOST_NAMES[@locale]}#{API_ROOT_PATH}#{@path}#{@query}")
+      return URI.parse("#{@protocol}://#{API_HOST_NAMES[@locale]}#{API_ROOT_PATH}#{@path}#{@query}")
     end
 
     def as_json()
@@ -53,6 +64,7 @@ module BattleNet
 
     protected
     def get()
+      auth_header = "BNET #{@@public_key} #{signature()}"
       http_response = Net::HTTP.get_response(self.uri())
       if (http_response.kind_of?(Net::HTTPSuccess)) # 200
         return http_response.body
@@ -72,6 +84,12 @@ module BattleNet
       raise(:not_implemented_exception)
     end
 
+    def signature()
+      unsigned_string = "GET\n#{Time.utc().to_s()}\n#{API_ROOT_PATH}#{@path}"
+      utf8_encoded_private_key = @@private_key # TODO: Ensure UTF-8 Encoding
+      Base64.encode64((HMAC::SHA1.new(utf8_encoded_private_key) << unsigned_string).digest)
+    end
+
     def initialize(options={})
       super(options)
       @protocol = "http"
@@ -81,5 +99,7 @@ module BattleNet
 
     private
     @@locale = API_LOCALES[0]
+    @@public_key = nil
+    @@private_key = nil
   end
 end
