@@ -1,6 +1,8 @@
+require 'request_base'
+require 'object_base'
+
 module BattleNet
-  class Character
-    require 'request_base'
+  class Character < RequestBase
 
     PROFILE_FIELDS = {
       :guild        => "guild",
@@ -18,12 +20,18 @@ module BattleNet
       :progression  => "progression",
     }.freeze()
 
-    def self.profile(name, realm, *options)
-      Character.new(name, realm, options)
+    def self.profile(name, realm, options={})
+      return Character.new(options.merge({ :name => name, :realm => realm }))
     end
 
     attr_reader :name,
                 :realm,
+                :level,
+                :thumbnail,
+                :race_id,
+                :achievement_points,
+                :gender_id,
+                :class_id,
                 :guild,
                 :items,
                 :stats,
@@ -38,31 +46,33 @@ module BattleNet
                 :achievements,
                 :progression
 
-    def initialize(name, realm, *options)
+    def initialize(options={})
+      instance_variable_set(:@guild, Guild.new(params.delete(:guild.to_s)))
       super(options)
-      @name = name
-      @realm = realm
-      @fields = options[:fields] ||= []
-      @guild = nil
-      @items = nil
-      @stats = nil
-      @talents = nil
-      @reputation = nil
-      @titles = nil
-      @professions = nil
-      @appearance = nil
-      @companions = nil
-      @mounts = nil
-      @pets = nil
-      @achievements = nil
-      @progression = nil
       @path = "/character/#{@realm}/#{@name}"
-      @query = "?fields=#{@fields.join(",")}" if((@fields.is_a?(Array) && !@fields.empty?) || PROFILE_FIELDS.has_key?(@fields))
-
+      @query = "?fields=#{@fields.join(",")}" if(@fields.is_a?(Array) && !@fields.empty?())
     end
   end
 
-  class Guild
+  class Guild < ObjectBase
+    attr_reader :name,
+                :realm,
+                :level,
+                :members,
+                :achievement_points,
+                :emblem
 
+    def initialize(params={})
+      instance_variable_set(:@emblem, GuildEmblem.new(params.delete(:emblem.to_s)))
+      super(params)
+    end
+  end
+
+  class GuildEmblem < ObjectBase
+    attr_reader :icon,
+                :icon_color,
+                :border,
+                :border_color,
+                :background_color
   end
 end

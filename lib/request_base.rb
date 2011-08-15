@@ -1,9 +1,10 @@
 require "net/http"
 require "uri"
 require "json"
+require "object_base"
 
 module BattleNet
-  class RequestBase
+  class RequestBase < ObjectBase
 
     API_ROOT_PATH = "/api/wow"
 
@@ -27,20 +28,34 @@ module BattleNet
       @@locale = locale
     end
 
-    private
-    @@locale = API_LOCALES[0]
+    attr_reader :locale, :last_modified
 
-    attr_reader :locale
+    def uri()
+     return URI.parse("#{@protocol}://#{API_HOST_NAMES[@locale]}#{API_ROOT_PATH}#{@path}#{@query}")
+    end
+
+    def as_json()
+      return get()
+    end
+
+    def as_hash()
+      string_response = self.as_json()
+      json_response = JSON.parse(string_response)
+      if (json_response.has_key?('Error'))
+        raise(:json_parsing_exception)
+      end
+      return json_response
+    end
+
+    def as_object()
+      return Object::const_get(self.class.to_s).new(self.as_hash())
+    end
 
     protected
     def get()
-      http_response = Net::HTTP.get_response(URI.parse(uri()))
+      http_response = Net::HTTP.get_response(self.uri())
       if (http_response.kind_of?(Net::HTTPSuccess)) # 200
-        json_response = JSON.parse(http_response.body)
-        if (json_response.has_key?('Error'))
-          raise(:json_parsing_exception)
-        end
-        return json_response
+        return http_response.body
       elsif (http_response.kind_of?(Net::HTTPClientError)) # 400
         raise(:http_client_exception)
       elsif (http_response.kind_of?(Net::HTTPServerError)) # 500
@@ -49,27 +64,22 @@ module BattleNet
       raise(:exception)
     end
 
-    protected
     def put()
       raise(:not_implemented_exception)
     end
 
-    protected
     def post()
       raise(:not_implemented_exception)
     end
 
-    protected
-    def initialize(*options)
+    def initialize(options={})
+      super(options)
       @protocol = "http"
       @locale = options[:locale] ||= @@locale
       @last_modified = options[:last_modified] ||= Time.now
-      @uri = nil
-      @post_data = nil
     end
 
-    def uri()
-      URI.parse("#{@protocol}://#{API_HOST_NAMES[@locale]}#{API_ROOT_PATH}#{path}#{query}")
-    end
+    private
+    @@locale = API_LOCALES[0]
   end
 end
