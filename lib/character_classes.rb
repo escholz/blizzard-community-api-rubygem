@@ -1,17 +1,18 @@
+require "api_request"
+
 module BattleNet
-  class CharacterClasses
-    require 'request_base'
-
-    def self.all(*options)
-      uri = URI.parse("#{super()}/character/#{realm}/#{name}#{query}")
-      "#{self.http_protocol()}://#{API_HOST_NAMES[self.locale()]}#{API_ROOT_PATH}"
-
+  class CharacterClasses < ApiRequest
+    def self.all(options={})
+      return CharacterClasses.new(options)
     end
 
-    private
-    def self.query()
-      "?fields=#{fields().join(",")}" if(fields().is_a?(Array) && !fields().empty?)
+    def as_object()
+      return self.as_hash()
     end
 
+    def initialize(options={})
+      super(options)
+      @path = "/data/character/classes"
+    end
   end
 end

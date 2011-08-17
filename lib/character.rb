@@ -1,8 +1,8 @@
-require 'request_base'
+require 'api_request'
 require 'object_base'
 
 module BattleNet
-  class Character < RequestBase
+  class Character < ObjectBase
 
     PROFILE_FIELDS = {
       :guild        => "guild",
@@ -21,6 +21,9 @@ module BattleNet
     }.freeze()
 
     def self.profile(name, realm, options={})
+      if(!name.is_a?(String) || name.empty? || !realm.is_a?(String) || realm.empty?)
+        raise(SyntaxError, "Name and realm must be non-empty string values")
+      end
       return Character.new(options.merge({ :name => name, :realm => realm }))
     end
 
@@ -28,10 +31,10 @@ module BattleNet
                 :realm,
                 :level,
                 :thumbnail,
-                :race_id,
+                :race,
                 :achievement_points,
-                :gender_id,
-                :class_id,
+                :gender,
+                :class,
                 :guild,
                 :items,
                 :stats,
@@ -47,14 +50,14 @@ module BattleNet
                 :progression
 
     def initialize(options={})
-      instance_variable_set(:@guild, Guild.new(params.delete(:guild.to_s)))
+      instance_variable_set(:@guild, CharacterGuild.new(options.delete(:guild.to_s))) if(options.has_key?(:guild.to_s))
       super(options)
       @path = "/character/#{@realm}/#{@name}"
       @query = "?fields=#{@fields.join(",")}" if(@fields.is_a?(Array) && !@fields.empty?())
     end
   end
 
-  class Guild < ObjectBase
+  class CharacterGuild < ObjectBase
     attr_reader :name,
                 :realm,
                 :level,
@@ -62,17 +65,74 @@ module BattleNet
                 :achievement_points,
                 :emblem
 
-    def initialize(params={})
-      instance_variable_set(:@emblem, GuildEmblem.new(params.delete(:emblem.to_s)))
-      super(params)
+    def initialize(options={})
+      instance_variable_set(:@emblem, CharacterGuildEmblem.new(options.delete(:emblem.to_s))) if(options.has_key?(:emblem.to_s))
+      super(options)
     end
   end
 
-  class GuildEmblem < ObjectBase
+  class CharacterGuildEmblem < ObjectBase
     attr_reader :icon,
                 :icon_color,
                 :border,
                 :border_color,
                 :background_color
   end
+
+  class CharacterItem < ObjectBase
+
+  end
+
+  class CharacterStats < ObjectBase
+    # KeyValuePair
+  end
+
+  class CharacterTalentSpec < ObjectBase
+
+  end
+
+  class CharacterReputation < ObjectBase
+    # KeyValuePair
+  end
+
+  class CharacterTitle < ObjectBase
+    # KeyValuePair
+  end
+
+  class CharacterProfession < ObjectBase
+
+  end
+
+  class CharacterAppearance < ObjectBase
+
+  end
+
+  class CharacterCompanion < ObjectBase
+    # Integer Array
+  end
+
+  class CharacterMount < ObjectBase
+    # Integer Array
+  end
+
+  class CharacterPet < ObjectBase
+
+  end
+
+  class CharacterAchievements < ObjectBase
+
+  end
+
+  class CharacterProgression < ObjectBase
+
+  end
+
+  class CharacterProgressionRaid < ObjectBase
+
+  end
+
+  class CharacterProgressionRaidBoss < ObjectBase
+
+  end
+
 end

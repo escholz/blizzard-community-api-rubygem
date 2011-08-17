@@ -1,6 +1,6 @@
 module BattleNet
-  class Guild
-    require 'request_base'
+  class CustomerGuild
+    require 'api_request'
 
     PROFILE_FIELDS = {
       :members => "members",

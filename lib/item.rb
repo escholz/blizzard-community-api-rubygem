@@ -1,6 +1,6 @@
 module BattleNet
   class Item
-    require 'request_base'
+    require 'api_request'
 
     PROFILE_FIELDS = {
       :guild        => "guild",

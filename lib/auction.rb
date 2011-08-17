@@ -1,6 +1,6 @@
 module BattleNet
   class Auction
-    require 'request_base'
+    require 'api_request'
 
     PROFILE_FIELDS = {
       :guild        => "guild",

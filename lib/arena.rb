@@ -1,7 +1,7 @@
-require 'request_base'
+require 'api_request'
 
 module BattleNet
-  class Arena < RequestBase
+  class Arena < ApiRequest
     TEAM_SIZES = [
       "2v2",
       "3v3",

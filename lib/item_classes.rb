@@ -1,6 +1,6 @@
 module BattleNet
   class ItemClasses
-    require 'request_base'
+    require 'api_request'
 
     def self.all(*options)
       uri = URI.parse("#{super()}/character/#{realm}/#{name}#{query}")

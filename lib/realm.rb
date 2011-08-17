@@ -1,6 +1,6 @@
 module BattleNet
   class Realm
-    require 'request_base'
+    require 'api_request'
 
     def self.status(name, realm, options={})
       uri = URI.parse("#{super()}/character/#{realm}/#{name}#{query}")
