@@ -3,8 +3,8 @@ module BattleNet
     @@private_key = nil
     @@public_key = nil
     @@default_locale = :en_US
-    @@default_proxy_host = "localhost"
-    @@default_proxy_port = 9999
+    @@default_proxy_host = nil
+    @@default_proxy_port = nil
     @@default_proxy_username = nil
     @@default_proxy_password = nil
 

@@ -62,7 +62,4 @@ module BattleNet
 
   class HttpServerError < RuntimeError
   end
-
-  class HttpNotModifiedError < RuntimeError
-  end
 end
