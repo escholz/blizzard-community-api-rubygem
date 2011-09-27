@@ -1,8 +1,29 @@
-= battle.net
+= Blizzard Community API RubyGem (blizzard-community-api-rubygem)
 
-Description goes here.
+This is a ruby client library to proxy requests to the Blizzard Community API. It has been built in a way to allow request creation and execution to happen asynchronously so you can queue up requests and load balance the execution to get around per-ip-address call limits.
 
-== Contributing to battle.net
+== Installing
+
+This is currently in pre-release. My test coverage is terrible and there may be a few architectural changes before I consider it complete. That being said, you're welcome to download it and use it as it is a functional work.
+
+Once I deem the release stable it will be available on popular rubygem distribution sites.
+
+== Usage
+
+There are requests based off of resources and actions in the API.
+For instance, to access a character's profile you would create a CharacterProfileRequest:
+
+# Request a character profile for Aven on Draenor
+request = CharacterProfileRequest.new("Aven","Draenor")
+# Execute the API call (subsequent calls to read on this object will return a stored object)
+request.read
+
+# Authorized requests
+auth_request = AuthorizedApiRequest.new(request, "public_key", "private_key")
+auth_request.read
+
+
+== Contributing to blizzard-community-api-rubygem
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
