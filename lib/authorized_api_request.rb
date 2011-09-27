@@ -6,8 +6,7 @@ module BattleNet
   ### Example of Authenticated Api Use:
   ### character_api_request = BattleNet::Character.profile("Aven","Draenor",:fields => [:stats, :talents])
   ### character_api_request_with_auth = AuthorizedApiRequest.new(character_api_request, "public_key", "private_key")
-  ### character_hash = character_api_request_with_auth.as_hash
-  ### character_json_string = character_api_request_with_auth.as_json
+  ### character_hash = character_api_request_with_auth.read
   class AuthorizedApiRequest < ApiRequest
 
     def initialize(api_request, public_key, private_key)

@@ -79,13 +79,13 @@ module BattleNet
                                                             }) do |http|
           http_response = http.request(get_request)
         end
-        if (http_response.kind_of?(Net::HTTPSuccess)) # 200
+        if (http_response.kind_of?(Net::HTTPSuccess)) # 2XX
           return http_response.body
         elsif (http_response.kind_of?(Net::HTTPNotModified)) # 304
           return nil # No Data
-        elsif (http_response.kind_of?(Net::HTTPClientError)) # 400
+        elsif (http_response.kind_of?(Net::HTTPClientError)) # 4XX
           raise(HttpClientError, http_response.body)
-        elsif (http_response.kind_of?(Net::HTTPServerError)) # 500
+        elsif (http_response.kind_of?(Net::HTTPServerError)) # 5XX
           raise(HttpServerError, http_response.body)
         end
         raise(RuntimeError, "Unknown Error")
@@ -118,15 +118,15 @@ module BattleNet
       "?" + hash.collect { |k,v| "#{uri_encode(k)}=#{uri_encode(v)}" }.join("&") unless(hash.empty?)
     end
 
-    def uri_encode(string)
-      if (string.is_a?(Symbol))
-        return uri_encode(string.to_s)
+    def uri_encode(raw)
+      if (raw.is_a?(Symbol))
+        return uri_encode(raw.to_s)
       end
-      if (string.is_a?(String))
-        return URI.escape(string, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+      if (raw.is_a?(String))
+        return URI.escape(raw, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
       end
-      if (string.is_a?(Array))
-        return string.collect { |v| uri_encode(v) }.join(",")
+      if (raw.is_a?(Array))
+        return raw.collect { |v| uri_encode(v) }.join(",")
       end
     end
   end
