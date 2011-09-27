@@ -1,3 +1,0 @@
-class Character
-  describe
-end
