@@ -20,6 +20,10 @@ module BattleNet
       "https"
     end
 
+    def locale
+      @api_request.locale
+    end
+
     def hostname
       @api_request.hostname
     end
@@ -30,6 +34,10 @@ module BattleNet
 
     def query
       @api_request.query
+    end
+
+    def last_modified
+      @api_request.last_modified
     end
 
     def headers

@@ -7,21 +7,16 @@ require "configuration"
 
 module BattleNet
   class ApiRequest
-    def raw(options={})
-      if(options[:force_refresh] || @json.nil?)
-        @json = get_response(options)
+    def read(options={})
+      if(options[:force_refresh] || @json_response.nil?)
+        raw_response = get_response(options)
+        return nil if(raw_response.nil?)
+        @json_response = JSON.parse(raw_response)
+        if (@json_response.has_key?('Error'))
+          raise(RuntimeError, "JsonParsingError: #{@json_response['Error']}")
+        end
       end
-      @json
-    end
-
-    def hash(options={})
-      raw_response = raw(options)
-      return nil if(raw_response.nil?)
-      json_response = JSON.parse(raw_response)
-      if (json_response.has_key?('Error'))
-        raise(RuntimeError, "JsonParsingError: #{json_response['Error']}")
-      end
-      json_response
+      @json_response
     end
 
     def initialize(options={})
@@ -37,7 +32,7 @@ module BattleNet
     end
 
     def uri
-      URI.parse("#{scheme}://#{hostname}#{path}?#{hash_to_query_string(query)}")
+      URI.parse("#{scheme}://#{hostname}#{path}#{hash_to_query_string(query)}")
     end
 
     def scheme
@@ -120,11 +115,19 @@ module BattleNet
     end
 
     def hash_to_query_string(hash)
-      hash.collect { |k,v| "#{uri_encode(k)}=#{uri_encode(v)}" }.join("&")
+      "?" + hash.collect { |k,v| "#{uri_encode(k)}=#{uri_encode(v)}" }.join("&") unless(hash.empty?)
     end
 
     def uri_encode(string)
-      URI.escape(string, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+      if (string.is_a?(Symbol))
+        return uri_encode(string.to_s)
+      end
+      if (string.is_a?(String))
+        return URI.escape(string, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+      end
+      if (string.is_a?(Array))
+        return string.collect { |v| uri_encode(v) }.join(",")
+      end
     end
   end
 end
