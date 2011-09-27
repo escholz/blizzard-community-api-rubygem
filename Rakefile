@@ -14,11 +14,11 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "battle.net"
-  gem.homepage = "http://github.com/escholz/battle.net"
+  gem.name = "blizzard-community-api"
+  gem.homepage = "http://github.com/escholz/blizzard-community-api-rubygem"
   gem.license = "MIT"
-  gem.summary = %Q{World of Warcraft API Client Library}
-  gem.description = %Q{Ruby Implementation of Blizzard's World of Warcraft API}
+  gem.summary = %Q{Blizzard Community API Client Library}
+  gem.description = %Q{Ruby Implementation of Blizzard's Community API}
   gem.email = "eric.scholz@gmail.com"
   gem.authors = ["Eric Scholz"]
   # dependencies defined in Gemfile
@@ -42,7 +42,7 @@ end
 
 task :default => :test
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
