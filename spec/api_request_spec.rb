@@ -1,7 +1,7 @@
-require "rspec"
+require "rspec_helper"
 require "../lib/api_request"
 
-include BattleNet
+include WOW
 
 describe ApiRequest do
   describe "::new" do
@@ -68,25 +68,31 @@ describe ApiRequest do
       request = ApiRequest.new()
       request.headers["Date"].should_not be_nil
       DateTime.parse(request.headers["Date"]).should < DateTime.now
-#      { "Date" => time_to_http_time(Time.now), "If-Modified-Since" => time_to_http_time(last_modified) }
+      request.headers["If-Modified-Since"].should_not be_nil
+      DateTime.parse(request.headers["If-Modified-Since"]).to_time.should == Time.at(0).utc
+    end
+    it "should change with the last_modified option" do
+      last_modified = Time.now.utc
+      request = ApiRequest.new(:last_modified => last_modified)
+      DateTime.parse(request.headers["If-Modified-Since"]).to_time.utc.to_i.should == last_modified.to_i
     end
   end
-  describe "#read" do
+  describe "#invoke", :live => true do
     require "../lib/character_profile_request"
     it "should return a json response" do
       request = CharacterProfileRequest.new("Aven","Draenor")
-      request.read.should be_a(Hash)
+      request.invoke.should be_a(Hash)
     end
     it "should return cached value on subsequent calls" do
       request = CharacterProfileRequest.new("Aven","Draenor")
-      obj_id_1 = request.read.object_id
-      obj_id_2 = request.read.object_id
+      obj_id_1 = request.invoke.object_id
+      obj_id_2 = request.invoke.object_id
       obj_id_1.should == obj_id_2
     end
     it "should force refresh with option[:force_refresh => true]" do
       request = CharacterProfileRequest.new("Aven","Draenor")
-      obj_id_1 = request.read.object_id
-      obj_id_2 = request.read(:force_refresh => true).object_id
+      obj_id_1 = request.invoke.object_id
+      obj_id_2 = request.invoke(:force_refresh => true).object_id
       obj_id_1.should_not == obj_id_2
     end
   end

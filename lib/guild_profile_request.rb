@@ -1,6 +1,6 @@
 require "api_request.rb"
 
-module BattleNet
+module WOW
   class GuildProfileRequest < ApiRequest
 
     def initialize(name, realm, options={})
@@ -24,7 +24,7 @@ module BattleNet
 
     def query
       if(fields.is_a?(Array) && !fields.empty?)
-        return super.merge({ "fields" => fields.join(",") })
+        return super.merge({ "fields" => fields })
       end
       super
     end

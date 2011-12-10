@@ -1,8 +1,8 @@
 require "api_request"
 require "base64"
-require "hmac-sha1"
+require "openssl"
 
-module BattleNet
+module WOW
   ### Example of Authenticated Api Use:
   ### character_api_request = BattleNet::Character.profile("Aven","Draenor",:fields => [:stats, :talents])
   ### character_api_request_with_auth = AuthorizedApiRequest.new(character_api_request, "public_key", "private_key")
@@ -56,7 +56,7 @@ module BattleNet
     end
 
     def signature
-      Base64.encode64((HMAC::SHA1.new(@private_key) << "GET\n#{@api_request.headers["Date"]}\n#{uri.path}\n").digest)
+      Base64.encode64((OpenSSL::HMAC.new(@private_key,"sha1") << "GET\n#{@api_request.headers["Date"]}\n#{uri.path}\n").digest)
     end
   end
 end

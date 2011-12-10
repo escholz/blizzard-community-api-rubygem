@@ -1,4 +1,4 @@
-module BattleNet
+module WOW
   class ApiRequestor
 
   end

@@ -1,4 +1,4 @@
-module BattleNet
+module WOW
   class Configuration
     @@private_key = nil
     @@public_key = nil
@@ -10,6 +10,14 @@ module BattleNet
 
     def self.private_key=(value)
       @@private_key = value
+    end
+
+    def self.private_key
+      @@private_key
+    end
+
+    def self.public_key
+      @@public_key
     end
 
     def self.public_key=(value)

@@ -1,16 +1,20 @@
 require 'api_request'
 
-module BattleNet
-  # TODO: Optionally? Follow the file and download the gzipped json file.
+module WOW
   class CurrentAuctionsRequest < ApiRequest
 
     def initialize(realm, options={})
       super(options)
+      if(!realm.is_a?(String) || realm.empty?)
+        raise(SyntaxError, "Realm must be non-empty string values")
+      end
       @realm = realm
     end
 
+    attr_reader :realm
+
     def path
-      "#{super}/auction/data/#{uri_encode(realm)}"
+      "#{super}/auction/data/#{uri_encode(realm).downcase}"
     end
 
   end

@@ -1,4 +1,4 @@
-module BattleNet
+module WOW
   API_ROOT_PATH = "/api/wow"
 
   API_LOCALES = [

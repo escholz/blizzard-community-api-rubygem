@@ -1,11 +1,14 @@
 require "api_request"
 
-module BattleNet
+module WOW
   class RealmStatusRequest < ApiRequest
 
     def initialize(options={})
       super(options)
-      @realms = options[:realms]
+      unless(options[:realms].nil? || options[:realms].is_a?(Array))
+        raise(SyntaxError, "Fields collection must be an Array")
+      end
+      @realms = options[:realms] ||= []
     end
 
     attr_reader :realms
@@ -16,7 +19,7 @@ module BattleNet
 
     def query
       if(realms.is_a?(Array) && !realms.empty?)
-        return super.merge({ "realms" => realms.collect{ |r| uri_encode(r) }.join(",") })
+        return super.merge({ "realms" => realms })
       end
       super
     end

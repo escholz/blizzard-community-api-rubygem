@@ -5,9 +5,9 @@ require "json"
 require "api_enums"
 require "configuration"
 
-module BattleNet
+module WOW
   class ApiRequest
-    def read(options={})
+    def invoke(options={})
       if(options[:force_refresh] || @json_response.nil?)
         raw_response = get_response(options)
         return nil if(raw_response.nil?)
@@ -24,7 +24,7 @@ module BattleNet
     end
 
     def locale
-      @options[:locale] ||= BattleNet::Configuration.default_locale
+      @options[:locale] ||= WOW::Configuration.default_locale
     end
 
     def last_modified
@@ -95,19 +95,19 @@ module BattleNet
     end
 
     def get_proxy_host(options)
-      options[:proxy_host] ||= BattleNet::Configuration.default_proxy_host
+      options[:proxy_host] ||= WOW::Configuration.default_proxy_host
     end
 
     def get_proxy_port(options)
-      options[:proxy_port] ||= BattleNet::Configuration.default_proxy_port
+      options[:proxy_port] ||= WOW::Configuration.default_proxy_port
     end
 
     def get_proxy_username(options)
-      options[:proxy_username] ||= BattleNet::Configuration.default_proxy_username
+      options[:proxy_username] ||= WOW::Configuration.default_proxy_username
     end
 
     def get_proxy_password(options)
-      options[:proxy_password] ||= BattleNet::Configuration.default_proxy_password
+      options[:proxy_password] ||= WOW::Configuration.default_proxy_password
     end
 
     def time_to_http_time(time)

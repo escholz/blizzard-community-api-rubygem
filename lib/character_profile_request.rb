@@ -1,6 +1,6 @@
 require "api_request"
 
-module BattleNet
+module WOW
   class CharacterProfileRequest < ApiRequest
 
     def initialize(name, realm, options={})

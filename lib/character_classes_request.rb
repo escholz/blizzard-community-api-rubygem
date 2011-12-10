@@ -1,6 +1,6 @@
 require "api_request"
 
-module BattleNet
+module WOW
   class CharacterClassesRequest < ApiRequest
 
     def path

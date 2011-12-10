@@ -1,7 +1,7 @@
 require 'api_request'
 
-module BattleNet
-  class GuildPerksRequeset < ApiRequest
+module WOW
+  class GuildPerksRequest < ApiRequest
 
     def path
       "#{super}/data/guild/perks"
