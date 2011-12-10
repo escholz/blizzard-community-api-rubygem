@@ -4,9 +4,9 @@ This is a ruby client library to proxy requests to the Blizzard Community API. I
 
 == Installing
 
-This is currently in pre-release. My test coverage is terrible and there may be a few architectural changes before I consider it complete. That being said, you're welcome to download it and use it as it is a functional work.
+gem install blizzard-community-api
 
-Once I deem the release stable it will be available on popular rubygem distribution sites.
+Version 1.0.0 is now available on Gemcutter.org.
 
 == Usage
 
@@ -14,14 +14,15 @@ There are requests based off of resources and actions in the API.
 For instance, to access a character's profile you would create a CharacterProfileRequest:
 
 # Request a character profile for Aven on Draenor
-request = CharacterProfileRequest.new("Aven","Draenor")
-# Execute the API call (subsequent calls to read on this object will return a stored object)
-request.read
+response = WOW::API.get_character_profile("Aven","Draenor")
 
 # Authorized requests
-auth_request = AuthorizedApiRequest.new(request, "public_key", "private_key")
-auth_request.read
+Configuration.public_key = "MY_PUBLIC_KEY"
+Configuration.private_key = "MY_PRIVATE_KEY"
 
+response = WOW::API::Authorized.get_character_profile("Aven","Draenor")
+
+Response from the service is JSON and is passed through the json rubygem to return a deserialized hash.
 
 == Contributing to blizzard-community-api-rubygem
  
