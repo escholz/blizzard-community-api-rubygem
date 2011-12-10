@@ -11,20 +11,6 @@ rescue Bundler::BundlerError => e
 end
 require 'rake'
 
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "blizzard-community-api"
-  gem.homepage = "http://github.com/escholz/blizzard-community-api-rubygem"
-  gem.license = "MIT"
-  gem.summary = %Q{Blizzard Community API Client Library}
-  gem.description = %Q{Ruby Implementation of Blizzard's Community API}
-  gem.email = "eric.scholz@gmail.com"
-  gem.authors = ["Eric Scholz"]
-  # dependencies defined in Gemfile
-end
-Jeweler::RubygemsDotOrgTasks.new
-
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 RSpec::Core::RakeTask.new(:rcov) do |rcov|
