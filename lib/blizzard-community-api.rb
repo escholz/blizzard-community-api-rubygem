@@ -29,63 +29,63 @@ module WOW
   class API
     def self.get_character_profile(name, realm, options={})
       require "character_profile_request"
-      invoke_request(CharacterProfileRequest.new(name, realm, options))
+      invoke_request(CharacterProfileRequest.new(name, realm, options), options)
     end
 
     def self.get_guild_profile(name, realm, options={})
       require "guild_profile_request"
-      invoke_request(GuildProfileRequest.new(name, realm, options))
+      invoke_request(GuildProfileRequest.new(name, realm, options), options)
     end
 
     def self.get_realm_status(options={})
       require "realm_status_request"
-      invoke_request(RealmStatusRequest.new(options))
+      invoke_request(RealmStatusRequest.new(options), options)
     end
 
     def self.get_current_auctions(realm, options={})
       require "current_auctions_request"
-      invoke_request(CurrentAuctionsRequest.new(realm, options))
+      invoke_request(CurrentAuctionsRequest.new(realm, options), options)
     end
 
     def self.get_item(item_id, options={})
       require "item_request"
-      invoke_request(ItemRequest.new(item_id, options))
+      invoke_request(ItemRequest.new(item_id, options), options)
     end
 
     def self.get_arena_team(realm, team_size, team_name, options={})
       require "arena_team_request"
-      invoke_request(ArenaTeamRequest.new(realm, team_size, team_name, options))
+      invoke_request(ArenaTeamRequest.new(realm, team_size, team_name, options), options)
     end
 
     def self.get_character_classes(options={})
       require "character_classes_request"
-      invoke_request(CharacterClassesRequest.new(options))
+      invoke_request(CharacterClassesRequest.new(options), options)
     end
 
     def self.get_character_races(options={})
       require "character_races_request"
-      invoke_request(CharacterRacesRequest.new(options))
+      invoke_request(CharacterRacesRequest.new(options), options)
     end
 
     def self.get_guild_perks(options={})
       require "guild_perks_request"
-      invoke_request(GuildPerksRequest.new(options))
+      invoke_request(GuildPerksRequest.new(options), options)
     end
 
     def self.get_guild_rewards(options={})
       require "guild_rewards_request"
-      invoke_request(GuildRewardsRequest.new(options))
+      invoke_request(GuildRewardsRequest.new(options), options)
     end
 
     def self.get_item_classes(options={})
       require "item_classes_request"
-      invoke_request(ItemClassesRequest.new(options))
+      invoke_request(ItemClassesRequest.new(options), options)
     end
 
     private
 
-    def self.invoke_request(request)
-      request.invoke
+    def self.invoke_request(request, options)
+      request.invoke(options)
     end
 
     class Authorized < API
